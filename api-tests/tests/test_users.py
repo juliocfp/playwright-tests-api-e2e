@@ -1,6 +1,7 @@
 import pytest
 from playwright.sync_api import APIRequestContext, expect
 from utils.faker import get_user_payload
+from utils.helpers import create_user_helper
 
 class TestUsersAPI:
     
@@ -23,7 +24,7 @@ class TestUsersAPI:
         
     def test_create_user(self, api_gorest: APIRequestContext):
         """Valida a criação de um novo usuário (POST)"""
-        response = create_user_helper(self, api_gorest)
+        response = create_user_helper(api_gorest)
         
         assert response.ok
         assert response.status == 201
@@ -35,7 +36,7 @@ class TestUsersAPI:
 
     def test_update_user(self, api_gorest: APIRequestContext):
         """Valida a atualização de um usuário (PUT)"""
-        user_data = create_user_helper(self, api_gorest).json()
+        user_data = create_user_helper(api_gorest).json()
         user_id = user_data["id"]
         updated_payload = get_user_payload()
         updated_payload["username"] = "qa_updated"
@@ -48,7 +49,7 @@ class TestUsersAPI:
 
     def test_delete_user(self, api_gorest: APIRequestContext):
         """Valida a remoção de um usuário (DELETE)"""
-        user_data = create_user_helper(self, api_gorest).json()
+        user_data = create_user_helper(api_gorest).json()
         user_id = user_data["id"]
         
         response = api_gorest.delete(f"/public/v2/users/{user_id}")
@@ -57,9 +58,3 @@ class TestUsersAPI:
         assert response.status == 204
         
         assert response.text() == ""
-
-def create_user_helper(self, api_gorest: APIRequestContext):
-    """Helper para criar um usuário e retornar o response."""
-    response = api_gorest.post("/public/v2/users", data=get_user_payload())
-    assert response.ok
-    return response
