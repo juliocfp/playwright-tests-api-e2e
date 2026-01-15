@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ambientes Virtuais
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Poetry
+# poetry.lock deve ser commitado em aplicações, mas ignorado se for biblioteca pura.
+# Mantemos ele no git por padrão para testes.
+
+# Playwright / Pytest
+.pytest_cache/
+test-results/
+playwright-report/
+report.html
+assets/
+
+# IDEs
+.vscode/
+.idea/
