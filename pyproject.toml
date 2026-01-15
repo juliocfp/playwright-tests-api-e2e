@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "playwright-tests"
+version = "0.1.0"
+description = "Testes automatizados de API e E2E com Playwright e Pytest"
+authors = ["Julio Parra <julio1652@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.14"
+pytest = "^9.0.2"
+pytest-playwright = "^0.7.2"
+pytest-html = "^4.1.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+# Configurações padrão do Pytest
+addopts = "--html=report.html --self-contained-html --verbose"
+base_url_api = "https://gorest.co.in/public/v2"
