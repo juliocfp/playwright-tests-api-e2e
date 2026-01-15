@@ -11,10 +11,13 @@ def api_gorest(playwright: Playwright) -> APIRequestContext:
     Cria um contexto de API compartilhado para a sessão de testes.
     Define a URL base e headers padrões.
     """
+    url = os.getenv("GOREST_BASE_URL")
+    token = os.getenv("GOREST_TOKEN")
+    
     request_context = playwright.request.new_context(
-        base_url=os.getenv("GOREST_BASE_URL"),
+        base_url=url,
         extra_http_headers={
-            "Authorization": os.getenv("GOREST_TOKEN"),
+            "Authorization": token,
             "Content-Type": "application/json",
             "Accept": "application/json"
         }
