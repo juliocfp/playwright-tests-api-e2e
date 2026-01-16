@@ -1,5 +1,6 @@
 from pytest_bdd import scenarios, given, when, then, parsers
 from pages.login_page import LoginPage
+from pages.account_page import AccountPage
 
 scenarios('../features/login.feature')   
 
@@ -20,8 +21,8 @@ def click_login(login_page: LoginPage):
     login_page.login_button.click()
 
 @then(parsers.parse('devo ser redirecionado para a área "{title_text}"'))
-def verify_dashboard(login_page: LoginPage, title_text):
-    login_page.verify_login_success(title_text)
+def verify_dashboard(account_page: AccountPage, title_text):
+    account_page.verify_login_success(title_text)
 
 @then(parsers.parse('devo ver uma mensagem de erro "{message}"'))
 def verify_error_message(login_page: LoginPage, message):

@@ -14,9 +14,6 @@ class LoginPage:
     def navigate(self):
         self.page.goto("https://practicesoftwaretesting.com/auth/login")
 
-    def verify_login_success(self, text_title):
-        expect(self.page_title).to_contain_text(text_title)
-
     def verify_login_error(self, message):
         expect(self.error_alert).to_be_visible()
         expect(self.error_alert).to_contain_text(message)
