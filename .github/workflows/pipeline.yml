@@ -43,9 +43,6 @@ jobs:
       if: steps.playwright-cache.outputs.cache-hit != 'true'
       run: poetry run playwright install --with-deps
 
-    - name: Setup Allure CLI
-      uses: simple-elf/setup-allure@v1
-
     - name: Run Tests
       env:
         GOREST_BASE_URL: ${{ secrets.GOREST_BASE_URL }}
