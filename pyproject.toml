@@ -11,6 +11,8 @@ pytest-playwright = "^0.7.2"
 allure-pytest = "^2.13.5"
 python-dotenv = "^1.0.1"
 Faker = "^33.1.0"
+allure-combine = "^1.0.11"
+taskipy = "^1.12.2"
 
 [build-system]
 requires = ["poetry-core"]
@@ -18,4 +20,11 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
 # Configurações padrão do Pytest
-addopts = "--alluredir=allure-results --verbose -s"
+addopts = "--alluredir=allure-results --clean-alluredir --verbose -s"
+
+[tool.taskipy.tasks]
+test = "pytest"
+generate = "allure generate allure-results -o allure-report --clean"
+combine = "allure-combine allure-report"
+report = "task generate && task combine"
+run-all = "task test && task report || task report"
