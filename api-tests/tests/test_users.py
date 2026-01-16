@@ -1,5 +1,5 @@
 import allure
-from playwright.sync_api import APIRequestContext
+from playwright.sync_api import APIRequestContext, expect
 from utils.factories import get_user_payload
 from utils.helpers import create_user_helper
 
@@ -16,7 +16,7 @@ class TestUsersAPI:
         with allure.step("Requisição GET para listar usuários"):
             response = api_gorest.get("/public/v2/users")
         
-        assert response.ok
+        expect(response).to_be_ok()
         assert response.status == 200
         assert "application/json" in response.headers["content-type"]
         
@@ -43,7 +43,7 @@ class TestUsersAPI:
         with allure.step("Requisição GET para buscar usuário específico"):
             response = api_gorest.get(f"/public/v2/users/{user_id}")
         
-        assert response.ok
+        expect(response).to_be_ok()
         assert response.status == 200
         assert "application/json" in response.headers["content-type"]
         
@@ -79,7 +79,7 @@ class TestUsersAPI:
         with allure.step("Requisição POST para criar usuário"):
             response = api_gorest.post("/public/v2/users", data=payload)
         
-        assert response.ok
+        expect(response).to_be_ok()
         assert response.status == 201
         
         data = response.json()       
@@ -146,7 +146,7 @@ class TestUsersAPI:
             payload = get_user_payload()
             response = api_gorest.post("/public/v2/users", data=payload)
         
-        assert response.ok
+        expect(response).to_be_ok()
         assert response.status == 201
         
         with allure.step("Requisição POST para criar usuário duplicado"):
@@ -185,7 +185,7 @@ class TestUsersAPI:
         with allure.step("Requisição PUT para atualizar usuário"):
             response = api_gorest.put(f"/public/v2/users/{user_id}", data=updated_payload)
         
-        assert response.ok
+        expect(response).to_be_ok()
         assert response.status == 200
 
         data = response.json()
@@ -237,7 +237,7 @@ class TestUsersAPI:
         with allure.step("Requisição DELETE para remover usuário"):
             response = api_gorest.delete(f"/public/v2/users/{user_id}")
         
-        assert response.ok
+        expect(response).to_be_ok()
         assert response.status == 204
         
         with allure.step("Validar que o usuário foi removido"):
