@@ -49,6 +49,13 @@ jobs:
         GOREST_TOKEN: ${{ secrets.GOREST_TOKEN }}
       run: poetry run task test-all
 
+    - name: Upload Allure Results
+      uses: actions/upload-artifact@v4
+      with:
+        name: allure-results-raw
+        path: allure-results
+        retention-days: 1
+
   report-results:
     timeout-minutes: 60
     runs-on: ubuntu-latest
@@ -61,13 +68,15 @@ jobs:
       id-token: write
 
     steps:
-    - name: Upload Allure Results
-      uses: actions/upload-artifact@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Download Allure Results
+      uses: actions/download-artifact@v4
       with:
-        name: allure-results-debug
+        name: allure-results-raw
         path: allure-results
-        retention-days: 1
-
+      
     - name: Get Allure History
       uses: actions/checkout@v4
       continue-on-error: true
