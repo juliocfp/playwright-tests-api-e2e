@@ -49,43 +49,17 @@ jobs:
         GOREST_TOKEN: ${{ secrets.GOREST_TOKEN }}
       run: poetry run task test-all
 
-    - name: Upload Allure Results
-      uses: actions/upload-artifact@v4
-      with:
-        name: allure-results-raw
-        path: allure-results
-        retention-days: 1
-
-  report-results:
-    timeout-minutes: 60
-    runs-on: ubuntu-latest
-    if: always()
-    needs: run-tests
-
-    permissions:
-      contents: write
-      pages: write
-      id-token: write
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      
-    - name: Download Allure Results
-      uses: actions/download-artifact@v4
-      with:
-        name: allure-results-raw
-        path: allure-results
-      
     - name: Get Allure History
       uses: actions/checkout@v4
       continue-on-error: true
+      if: always()
       with:
         ref: gh-pages
         path: gh-pages
 
     - name: Generate Allure Report
       uses: simple-elf/allure-report-action@master
+      if: always()
       with:
         allure_results: ${{ github.workspace }}/allure-results
         allure_history: allure-history
@@ -93,6 +67,7 @@ jobs:
 
     - name: Deploy Report to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
+      if: always()
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_branch: gh-pages
