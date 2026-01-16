@@ -26,3 +26,8 @@ def verify_dashboard(login_page: LoginPage, title_text):
 @then(parsers.parse('devo ver uma mensagem de erro "{message}"'))
 def verify_error_message(login_page: LoginPage, message):
     login_page.verify_login_error(message)
+
+@then(parsers.parse('devo ver mensagens de erro "{message_email}" e "{message_password}"'))
+def verify_required_fields_error(login_page: LoginPage, message_email, message_password):
+    login_page.verify_email_required_error(message_email)
+    login_page.verify_password_required_error(message_password)
