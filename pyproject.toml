@@ -10,11 +10,11 @@ pytest = "^8.2.0"
 pytest-playwright = "^0.7.2"
 playwright = "^1.57.0"
 pytest-bdd = "^8.1.0"
-allure-pytest = "^2.13.5"
 python-dotenv = "^1.0.1"
 Faker = "^33.1.0"
 allure-combine = "^1.0.11"
 taskipy = "^1.12.2"
+allure-pytest = "^2.15.3"
 
 [build-system]
 requires = ["poetry-core"]

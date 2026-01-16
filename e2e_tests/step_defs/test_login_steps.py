@@ -3,7 +3,7 @@ from pytest_bdd import scenarios, given, when, then, parsers
 from pages.login_page import LoginPage
 from pages.account_page import AccountPage
 
-scenarios('../features/login.feature')   
+scenarios('../features/login.feature')
 
 @given('que estou na página de login')
 def open_login_page(login_page: LoginPage):

@@ -24,3 +24,9 @@ def take_evidence_automatically(page: Page):
         )
     except Exception as e:
         print(f"Erro ao tirar evidência final: {e}")
+
+def pytest_bdd_before_scenario(feature, scenario):
+    allure.dynamic.title(scenario.name)
+    allure.dynamic.feature(feature.name)
+    filename = feature.rel_filename.split("/")[-1]
+    allure.dynamic.story(filename)
