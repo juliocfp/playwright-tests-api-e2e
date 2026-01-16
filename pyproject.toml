@@ -31,9 +31,9 @@ markers = [
 
 [tool.taskipy.tasks]
 test-api = "pytest -m api"
-test-e2e = "pytest -m web --headed --slowmo 500"
+test-e2e = "pytest -m web --headed --slowmo 500 --tracing=retain-on-failure"
 generate = "allure generate allure-results -o allure-report --clean"
 combine = "allure-combine allure-report"
 report = "task generate && task combine"
 run-all-api = "task test-api && task report || task report"
-run-all-e2e = "task test-e2e"
+run-all-e2e = "task test-e2e && task report || task report"

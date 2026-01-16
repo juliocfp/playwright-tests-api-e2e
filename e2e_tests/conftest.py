@@ -1,6 +1,8 @@
+import allure
 import pytest
 from pages.account_page import AccountPage
 from pages.login_page import LoginPage
+from playwright.sync_api import Page
 
 @pytest.fixture
 def login_page(page):
@@ -9,3 +11,16 @@ def login_page(page):
 @pytest.fixture
 def account_page(page):
     return AccountPage(page)
+
+@allure.title("Evidência final automática após teste")
+@pytest.fixture(autouse=True)
+def take_evidence_automatically(page: Page):
+    yield
+    try:
+        allure.attach(
+            page.screenshot(full_page=True),
+            name="Evidência Final",
+            attachment_type=allure.attachment_type.PNG
+        )
+    except Exception as e:
+        print(f"Erro ao tirar evidência final: {e}")
