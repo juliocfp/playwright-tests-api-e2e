@@ -8,6 +8,8 @@ authors = ["Julio Parra <julio1652@gmail.com>"]
 python = "^3.11"
 pytest = "^8.2.0"
 pytest-playwright = "^0.7.2"
+playwright = "^1.57.0"
+pytest-bdd = "^8.1.0"
 allure-pytest = "^2.13.5"
 python-dotenv = "^1.0.1"
 Faker = "^33.1.0"
@@ -20,11 +22,18 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
 # Configurações padrão do Pytest
-addopts = "--alluredir=allure-results --clean-alluredir --verbose -s"
+addopts = "--alluredir=allure-results --clean-alluredir --verbose -s --strict-markers"
+testpaths = ["e2e_tests", "api-tests"]
+markers = [
+    "web: Testes E2E",
+    "api: Testes de API"
+]
 
 [tool.taskipy.tasks]
-test = "pytest"
+test-api = "pytest -m api"
+test-e2e = "pytest -m web --headed --slowmo 500"
 generate = "allure generate allure-results -o allure-report --clean"
 combine = "allure-combine allure-report"
 report = "task generate && task combine"
-run-all = "task test && task report || task report"
+run-all-api = "task test-api && task report || task report"
+run-all-e2e = "task test-e2e"
