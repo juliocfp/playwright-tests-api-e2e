@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "playwright-tests"
+name = "playwright-tests-api-e2e"
 version = "0.1.0"
-description = "Testes automatizados de API e E2E com Playwright e Pytest"
+description = "Testes automatizados de API e E2E com Playwright, Pytthon e Cucumber"
 authors = ["Julio Parra <julio1652@gmail.com>"]
 
 [tool.poetry.dependencies]
