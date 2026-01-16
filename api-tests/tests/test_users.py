@@ -1,8 +1,10 @@
 import allure
 from playwright.sync_api import APIRequestContext, expect
+import pytest
 from utils.factories import get_user_payload
 from utils.helpers import create_user_helper
 
+@pytest.mark.api
 @allure.feature("API - Gestão de Usuários")
 class TestUsersAPI:
     
