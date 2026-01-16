@@ -30,3 +30,24 @@ def pytest_bdd_before_scenario(feature, scenario):
     allure.dynamic.feature(feature.name)
     filename = feature.rel_filename.split("/")[-1]
     allure.dynamic.story(filename)
+
+@pytest.fixture(scope="session")
+def browser_context_args(browser_context_args):
+    return {
+        **browser_context_args,
+        "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
+        "viewport": {"width": 1920, "height": 1080},
+        "device_scale_factor": 1,
+    }
+
+@pytest.fixture(scope="session")
+def browser_type_launch_args(browser_type_launch_args):
+    return {
+        **browser_type_launch_args,
+        "args": [
+            "--disable-blink-features=AutomationControlled",
+            "--start-maximized",
+            "--no-sandbox",
+            "--disable-infobars"
+        ]
+    }
