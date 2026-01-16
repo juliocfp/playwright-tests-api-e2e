@@ -3,7 +3,7 @@ from playwright.sync_api import APIRequestContext
 from utils.factories import get_user_payload
 from utils.helpers import create_user_helper
 
-@allure.feature("Gestão de Usuários")
+@allure.feature("API - Gestão de Usuários")
 class TestUsersAPI:
     
     @allure.story("Listar Usuários")
@@ -137,6 +137,27 @@ class TestUsersAPI:
 
         with allure.step("Validar mensagem de erro para JSON malformado"):
             assert data["message"] == "Authentication failed"
+
+    @allure.story("Criar Usuário")
+    @allure.title("Não deve criar usuário duplicado")
+    @allure.severity(allure.severity_level.CRITICAL)
+    def test_create_duplicated_user(self, api_gorest: APIRequestContext):
+        with allure.step("Requisição POST para criar primeiro usuário"):
+            payload = get_user_payload()
+            response = api_gorest.post("/public/v2/users", data=payload)
+        
+        assert response.ok
+        assert response.status == 201
+        
+        with allure.step("Requisição POST para criar usuário duplicado"):
+            response = api_gorest.post("/public/v2/users", data=payload)
+        
+        assert response.status == 422        
+        data = response.json()       
+        
+        with allure.step("Validar mensagem de erro para usuário duplicado"):
+            assert data[0]["field"] == "email"
+            assert data[0]["message"] == "has already been taken"
 
     @allure.story("Criar Usuário")
     @allure.title("Não deve permitir criação sem autenticação")
