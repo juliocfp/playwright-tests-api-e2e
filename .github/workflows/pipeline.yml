@@ -17,29 +17,27 @@ jobs:
       id-token: write
 
     steps:
-    # 1. Baixa o código do repositório
+    # 1. Baixa o código
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    # 2. Instala Python e configura Cache do Poetry automaticamente
+    # 2. Instala o Poetry (CORREÇÃO: Isso deve vir ANTES do setup-python)
+    # Usamos pipx que já vem instalado no runner e garante o PATH correto
+    - name: Install Poetry
+      run: pipx install poetry
+
+    # 3. Instala Python e configura Cache
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.11'
-        cache: 'poetry' # Cache nativo para dependências python
-
-    # 3. Instala e configura o Poetry
-    - name: Install Poetry
-      run: |
-        curl -sSL https://install.python-poetry.org | python3 -
-        echo "$HOME/.local/bin" >> $GITHUB_PATH
+        cache: 'poetry' # Agora funciona porque o poetry já está instalado
 
     # 4. Instala dependências do projeto
     - name: Install Dependencies
       run: poetry install
 
-    # 5. Cache Inteligente dos Browsers do Playwright
-    # Isso evita baixar 300MB+ de binários toda vez que rodar
+    # 5. Cache dos Navegadores do Playwright
     - name: Cache Playwright Browsers
       id: playwright-cache
       uses: actions/cache@v4
@@ -47,18 +45,17 @@ jobs:
         path: ~/.cache/ms-playwright
         key: ${{ runner.os }}-playwright-${{ hashFiles('**/poetry.lock') }}
 
-    # 6. Instala Browsers (Apenas se o cache não existir)
+    # 6. Instala Browsers (Se não tiver cache)
     - name: Install Playwright Browsers
       if: steps.playwright-cache.outputs.cache-hit != 'true'
       run: poetry run playwright install --with-deps
 
-    # 7. Executa os testes (Gera resultados brutos para o Allure)
+    # 7. Executa os testes
     - name: Run Tests
-      # 'continue-on-error: true' garante que o relatório seja gerado mesmo se testes falharem
-      continue-on-error: true 
-      run: poetry run task test-all  # Ou seu comando: pytest --alluredir=allure-results
+      continue-on-error: true
+      run: poetry run task test-all
 
-    # 8. Gera o Relatório Allure com Histórico
+    # 8. Baixa histórico para o relatório
     - name: Get Allure History
       uses: actions/checkout@v4
       if: always()
@@ -67,6 +64,7 @@ jobs:
         ref: gh-pages
         path: gh-pages
 
+    # 9. Gera o Relatório
     - name: Generate Allure Report
       uses: simple-elf/allure-report-action@master
       if: always()
@@ -75,7 +73,7 @@ jobs:
         allure_history: allure-history
         keep_reports: 20
 
-    # 9. Publica o Relatório no GitHub Pages
+    # 10. Publica no GitHub Pages
     - name: Deploy Report to GitHub Pages
       if: always()
       uses: peaceiris/actions-gh-pages@v3
