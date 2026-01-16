@@ -49,6 +49,14 @@ jobs:
         GOREST_TOKEN: ${{ secrets.GOREST_TOKEN }}
       run: poetry run task test-all
 
+    - name: Upload Allure Results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: allure-results-debug
+        path: allure-results
+        retention-days: 1
+
     - name: Get Allure History
       uses: actions/checkout@v4
       if: always()
