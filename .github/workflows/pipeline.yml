@@ -17,27 +17,21 @@ jobs:
       id-token: write
 
     steps:
-    # 1. Baixa o código
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    # 2. Instala o Poetry (CORREÇÃO: Isso deve vir ANTES do setup-python)
-    # Usamos pipx que já vem instalado no runner e garante o PATH correto
     - name: Install Poetry
       run: pipx install poetry
 
-    # 3. Instala Python e configura Cache
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.11'
-        cache: 'poetry' # Agora funciona porque o poetry já está instalado
+        cache: 'poetry'
 
-    # 4. Instala dependências do projeto
     - name: Install Dependencies
       run: poetry install
 
-    # 5. Cache dos Navegadores do Playwright
     - name: Cache Playwright Browsers
       id: playwright-cache
       uses: actions/cache@v4
@@ -45,19 +39,19 @@ jobs:
         path: ~/.cache/ms-playwright
         key: ${{ runner.os }}-playwright-${{ hashFiles('**/poetry.lock') }}
 
-    # 6. Instala Browsers (Se não tiver cache)
     - name: Install Playwright Browsers
       if: steps.playwright-cache.outputs.cache-hit != 'true'
       run: poetry run playwright install --with-deps
 
-    # 7. Executa os testes
+    - name: Setup Allure CLI
+      uses: simple-elf/setup-allure@v1
+
     - name: Run Tests
       env:
         GOREST_BASE_URL: ${{ secrets.GOREST_BASE_URL }}
         GOREST_TOKEN: ${{ secrets.GOREST_TOKEN }}
-      run: poetry run task test-all
+      run: poetry run task run-all-api
 
-    # 8. Baixa histórico para o relatório
     - name: Get Allure History
       uses: actions/checkout@v4
       if: always()
@@ -66,7 +60,6 @@ jobs:
         ref: gh-pages
         path: gh-pages
 
-    # 9. Gera o Relatório
     - name: Generate Allure Report
       uses: simple-elf/allure-report-action@master
       if: always()
@@ -75,7 +68,6 @@ jobs:
         allure_history: allure-history
         keep_reports: 20
 
-    # 10. Publica no GitHub Pages
     - name: Deploy Report to GitHub Pages
       if: always()
       uses: peaceiris/actions-gh-pages@v3
