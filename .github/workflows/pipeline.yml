@@ -47,7 +47,7 @@ jobs:
       env:
         GOREST_BASE_URL: ${{ secrets.GOREST_BASE_URL }}
         GOREST_TOKEN: ${{ secrets.GOREST_TOKEN }}
-      run: poetry run task run-all-api
+      run: poetry run task test-all
 
     - name: Get Allure History
       uses: actions/checkout@v4
