@@ -42,10 +42,10 @@ def address_page(page):
 def payment_page(page):
     return PaymentPage(page)
 
-@pytest.fixture(autouse=True)
-def cloudflare_verification(page: Page):
-    if page.get_by_text("Verify you are human by completing the action below.").is_visible():
-        pytest.skip("SKIPPED: Cloudflare detectado.")
+def cloudflare_verification(page: Page, scenario):
+    if allure.step == scenario.steps[0]:
+        if page.get_by_text("Verify you are human by completing the action below.").is_visible():
+            pytest.skip("SKIPPED: Cloudflare detectado.")
 
 @allure.title("Evidência final automática após teste")
 @pytest.fixture(autouse=True)
