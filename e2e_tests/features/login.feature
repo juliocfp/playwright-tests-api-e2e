@@ -23,7 +23,7 @@ Feature: Login na Practice Software Testing
         When eu preencho o email com "emailerrado@practicesoftwaretesting"
         And preencho a senha com "pass123"
         And clico no botão de login
-        Then devo ver uma mensagem de erro "Invalid email or passwaord"
+        Then devo ver uma mensagem de erro "Invalid email or password"
 
     Scenario: Tentativa de login sem preencher campos
         Given que estou na página de login
