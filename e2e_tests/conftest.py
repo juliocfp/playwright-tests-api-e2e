@@ -8,7 +8,7 @@ from pages.product_page import ProductPage
 from pages.home_page import HomePage
 from pages.account_page import AccountPage
 from pages.login_page import LoginPage
-from playwright.sync_api import Page
+from playwright.sync_api import Page, Error
 
 @pytest.fixture
 def login_page(page):
@@ -42,10 +42,30 @@ def address_page(page):
 def payment_page(page):
     return PaymentPage(page)
 
-def cloudflare_verification(page: Page, feature, scenario, step, step_func, step_func_args):
-    if allure.step == scenario.steps[0]:
-        if page.get_by_text("Verify you are human by completing the action below.").is_visible():
-            pytest.skip("SKIPPED: Cloudflare detectado.")
+def pytest_bdd_step_error(request, feature, scenario, step, step_func, step_func_args, exception):
+    try:
+        page = request.getfixturevalue("page")
+        
+        if page.is_closed():
+            return
+
+        title = page.title()
+        content = page.content()[:1000]
+
+        cloudflares = [
+            "Just a moment", 
+            "Verify you are human", 
+            "Attention Required! | Cloudflare"
+        ]
+
+        is_cloudflare = any(cloudflare in title for cloudflare in cloudflares) or \
+                        ("challenge-platform" in content)
+
+        if is_cloudflare:
+            pytest.skip("SKIPPED: Cloudflare detected on the page, skipping the test.")
+
+    except (pytest.FixtureLookupError, Exception):
+        pass
 
 @allure.title("Evidência final automática após teste")
 @pytest.fixture(autouse=True)
