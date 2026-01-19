@@ -25,3 +25,12 @@ class LoginPage:
     def verify_password_required_error(self, message):
         expect(self.password_required_alert).to_be_visible()
         expect(self.password_required_alert).to_contain_text(message)
+
+    def fill_email(self, email):
+        self.email_input.fill(email)
+
+    def fill_password(self, password):
+        self.password_input.fill(password)
+
+    def click_login(self):
+        self.login_button.click()
