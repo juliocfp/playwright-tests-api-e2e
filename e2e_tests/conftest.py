@@ -42,7 +42,7 @@ def address_page(page):
 def payment_page(page):
     return PaymentPage(page)
 
-def cloudflare_verification(page: Page, scenario):
+def cloudflare_verification(page: Page, feature, scenario, step, step_func, step_func_args):
     if allure.step == scenario.steps[0]:
         if page.get_by_text("Verify you are human by completing the action below.").is_visible():
             pytest.skip("SKIPPED: Cloudflare detectado.")
