@@ -42,6 +42,20 @@ def address_page(page):
 def payment_page(page):
     return PaymentPage(page)
 
+@pytest.fixture(autouse=True)
+def cloudflare_verification(page: Page):
+    locators_cloudflare = page.get_by_text("Verify you are human by completing the action below.")
+
+    def skip_if_cloudflare():
+        with allure.step("🚨 SKIPPED: Bloqueio do Cloudflare detectado via Handler."):
+            pytest.skip("🚨 SKIPPED: Bloqueio do Cloudflare detectado via Handler.")
+
+    page.add_locator_handler(
+        locator=locators_cloudflare,
+        handler=skip_if_cloudflare,
+        no_wait_after=True 
+    )
+
 @allure.title("Evidência final automática após teste")
 @pytest.fixture(autouse=True)
 def take_evidence_automatically(page: Page):
