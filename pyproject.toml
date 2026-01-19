@@ -3,6 +3,7 @@ name = "playwright-tests-api-e2e"
 version = "0.1.0"
 description = "Testes automatizados de API e E2E com Playwright, Pytthon e Cucumber"
 authors = ["Julio Parra <julio1652@gmail.com>"]
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -37,3 +38,4 @@ combine = "allure-combine allure-report"
 report = "task generate && task combine"
 run-all-api = "task test-api && task report || task report"
 run-all-e2e = "task test-e2e && task report || task report"
+test-all = "pytest --alluredir=allure-results"

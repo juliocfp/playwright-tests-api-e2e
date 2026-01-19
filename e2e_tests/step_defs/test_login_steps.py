@@ -13,17 +13,17 @@ def open_login_page(login_page: LoginPage):
 @when(parsers.parse('eu preencho o email com "{email}"'))
 def enter_email(login_page: LoginPage, email):
     with allure.step("Preencher o campo de email"):
-        login_page.email_input.fill(email)
+        login_page.fill_email(email)
 
 @when(parsers.parse('preencho a senha com "{password}"'))
 def enter_password(login_page: LoginPage, password):
     with allure.step("Preencher o campo de senha"):
-        login_page.password_input.fill(password)
+        login_page.fill_password(password)
 
 @when('clico no botão de login')
 def click_login(login_page: LoginPage):
     with allure.step("Clicar no botão de login"):
-        login_page.login_button.click()
+        login_page.click_login()
 
 @then(parsers.parse('devo ser redirecionado para a área "{title_text}"'))
 def verify_dashboard(account_page: AccountPage, title_text):
