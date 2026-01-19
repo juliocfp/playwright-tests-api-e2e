@@ -12,6 +12,27 @@ O projeto utiliza **Taskipy** para orquestrar os comandos, **Poetry** para geren
 * **Pytest-BDD** (Escrita de cenários em Gherkin)
 * **Allure Reports** (Relatórios de execução)
 
+## 📂 Estrutura do Projeto
+```text
+/playwright-tests-api-e2e
+├── /api-tests              # Diretório raiz dos testes de API (Backend)
+│   ├── /tests              # Arquivos de especificação dos testes (test_*.py)
+│   ├── /utils              # Funções utilitárias e helpers (ex: geradores de dados)
+│   ├── conftest.py         # Configurações globais e Fixtures (setup/teardown) de API
+│   └── README.md           # Documentação específica de execução da API
+├── /e2e_tests              # Diretório raiz dos testes E2E (Frontend/UI)
+│   ├── /features           # Arquivos de cenários em Gherkin (.feature)
+│   ├── /pages              # Page Objects (Mapeamento de elementos e ações das telas)
+│   ├── /step_defs          # Implementação técnica dos passos (Steps) do Gherkin
+│   ├── conftest.py         # Configurações e Fixtures de Browser/Contexto para E2E
+│   └── README.md           # Documentação específica de execução E2E
+├── ./github                # Arquivo de configuração .yml da pipeline 
+├── .env.example            # Modelo das variáveis de ambiente (template sem senhas reais)
+├── poetry.lock             # Versões travadas das dependências (garantia de integridade)
+├── pyproject.toml          # Configuração do projeto, dependências e scripts (Taskipy)
+└── README.md               # Documentação principal (Instalação e Governança)
+```
+
 ## 🚀 Instalação e Configuração
 
 1.  **Instalar Dependências:**
@@ -58,3 +79,4 @@ Focados em contratos e regras de negócio no backend.
 
 * `/api-tests`: Contém os testes de backend e validações de serviço.
 * `/e2e_tests`: Contém os testes de interface, Page Objects e arquivos .feature (BDD).
+
