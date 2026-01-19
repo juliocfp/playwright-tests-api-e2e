@@ -1,0 +1,1 @@
+{"total":2,"items":[{"uid":"3197e5d02609a5e17c5b18fd87f38ab5","name":"e2e_tests.step_defs","statistic":{"failed":1,"broken":0,"skipped":0,"passed":14,"unknown":0,"total":15}},{"uid":"b227dffc0c3f3bdd06c4c0e88be415a0","name":"api-tests.tests","statistic":{"failed":0,"broken":0,"skipped":0,"passed":15,"unknown":0,"total":15}}]}
