@@ -1,5 +1,11 @@
 import allure
 import pytest
+from pages.address_page import AddressPage
+from pages.payment_page import PaymentPage
+from pages.login_checkout_page import LoginCheckoutPage
+from pages.cart_page import CartPage
+from pages.product_page import ProductPage
+from pages.home_page import HomePage
 from pages.account_page import AccountPage
 from pages.login_page import LoginPage
 from playwright.sync_api import Page
@@ -11,6 +17,30 @@ def login_page(page):
 @pytest.fixture
 def account_page(page):
     return AccountPage(page)
+
+@pytest.fixture
+def home_page(page):
+    return HomePage(page)
+
+@pytest.fixture
+def product_page(page):
+    return ProductPage(page)
+
+@pytest.fixture
+def cart_page(page):
+    return CartPage(page)
+
+@pytest.fixture
+def login_checkout_page(page):
+    return LoginCheckoutPage(page)
+
+@pytest.fixture
+def address_page(page):
+    return AddressPage(page)
+
+@pytest.fixture
+def payment_page(page):
+    return PaymentPage(page)
 
 @allure.title("Evidência final automática após teste")
 @pytest.fixture(autouse=True)

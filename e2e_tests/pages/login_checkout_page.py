@@ -12,3 +12,4 @@ class LoginCheckoutPage:
         self.email_input.fill(email)
         self.password_input.fill(password)
         self.login_button.click()
+        self.proceed_button.click()

@@ -6,7 +6,7 @@ class AddressPage:
     CITY = "São Paulo"
     STATE = "SP"
     COUNTRY = "Brasil"
-    POSTAL_CODE = "04173-170"
+    POSTAL_CODE = "04173170"
 
     def __init__(self, page: Page):
         self.page = page
@@ -18,6 +18,7 @@ class AddressPage:
         self.proceed_button = page.locator("data-test=proceed-3")
 
     def fill_address(self):
+        expect(self.street_input).not_to_be_empty()
         self.street_input.fill(self.STREET)
         self.city_input.fill(self.CITY)
         self.state_input.fill(self.STATE)
@@ -25,4 +26,5 @@ class AddressPage:
         self.postal_code_input.fill(self.POSTAL_CODE)
 
     def click_proceed(self):
+        expect(self.proceed_button).to_be_enabled()
         self.proceed_button.click()
