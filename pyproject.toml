@@ -16,6 +16,7 @@ Faker = "^33.1.0"
 allure-combine = "^1.0.11"
 taskipy = "^1.12.2"
 allure-pytest = "^2.15.3"
+pydantic-settings = "^2.12.0"
 
 [build-system]
 requires = ["poetry-core"]
@@ -31,8 +32,8 @@ markers = [
 ]
 
 [tool.taskipy.tasks]
-test-api = "pytest -m api"
-test-e2e = "pytest -m web --headed --slowmo 500 --tracing=retain-on-failure"
+test-api = "pytest -m api --env=qa"
+test-e2e = "pytest -m web --env=dev --headed --tracing=retain-on-failure"
 generate = "allure generate allure-results -o allure-report --clean"
 combine = "allure-combine allure-report"
 report = "task generate && task combine"

@@ -12,7 +12,7 @@ class LoginPage:
         self.password_required_alert = page.locator("data-test=password-error")
 
     def navigate(self):
-        self.page.goto("https://practicesoftwaretesting.com/auth/login")
+        self.page.goto("/auth/login")
 
     def verify_login_error(self, message):
         expect(self.error_alert).to_be_visible()
