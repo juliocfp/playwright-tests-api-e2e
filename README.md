@@ -29,6 +29,8 @@ O projeto utiliza **Taskipy** para orquestrar os comandos, **Poetry** para geren
 ├── ./github                # Arquivo de configuração .yml da pipeline 
 ├── .env.example            # Modelo das variáveis de ambiente (template sem senhas reais)
 ├── poetry.lock             # Versões travadas das dependências (garantia de integridade)
+├── config.py               # Gerenciamento centralizado de configurações (Pydantic Settings)
+├── conftest.py             # Fixtures Globais (Seleção de ambiente --env, Hooks de Report)
 ├── pyproject.toml          # Configuração do projeto, dependências e scripts (Taskipy)
 └── README.md               # Documentação principal (Instalação e Governança)
 ```
@@ -87,3 +89,4 @@ Focados em contratos e regras de negócio no backend.
 * `/api-tests`: Contém os testes de backend e validações de serviço.
 
 * `/e2e_tests`: Contém os testes de interface, Page Objects e arquivos .feature (BDD).
+
