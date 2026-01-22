@@ -40,10 +40,17 @@ O projeto utiliza **Taskipy** para orquestrar os comandos, **Poetry** para geren
 
     `poetry install`
 
-3.  **Instalar Navegadores:**
+2.  **Instalar Navegadores:**
     Necessário para os testes de interface (E2E):
 
     `poetry run playwright install`
+
+3.  **Configurar Variáveis de Ambiente:**
+    O arquivo `.env.example` deve ser renomeado para `.env` e deve ser preenchido:
+    
+* com um token válido retirado de `https://gorest.co.in/my-account/access-tokens`
+
+* com as URLs de cada ambiente: DEV, QA e PROD
 
 ## 🤖 Comandos de Execução (Tasks)
 
@@ -78,5 +85,5 @@ Focados em contratos e regras de negócio no backend.
 ## 📂 Estrutura do Projeto
 
 * `/api-tests`: Contém os testes de backend e validações de serviço.
-* `/e2e_tests`: Contém os testes de interface, Page Objects e arquivos .feature (BDD).
 
+* `/e2e_tests`: Contém os testes de interface, Page Objects e arquivos .feature (BDD).

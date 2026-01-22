@@ -2,9 +2,18 @@ name: Playwright Tests
 
 on:
   push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
+
+  workflow_dispatch:
+    inputs:
+      target_env:
+        description: 'Qual ambiente testar?'
+        required: true
+        default: 'qa'
+        type: choice
+        options:
+        - dev
+        - qa
+        - prd
 
 jobs:
   run-tests:
@@ -45,9 +54,25 @@ jobs:
 
     - name: Run Tests
       env:
+        BASE_URL_DEV: ${{ secrets.BASE_URL_DEV }}
+        BASE_URL_QA: ${{ secrets.BASE_URL_QA }}
+        BASE_URL_PRD: ${{ secrets.BASE_URL_PRD }}
+        
+        API_URL_DEV: ${{ secrets.API_URL_DEV }}
+        API_URL_QA: ${{ secrets.API_URL_QA }}
+        API_URL_PRD: ${{ secrets.API_URL_PRD }}
+        
+        API_TOKEN: ${{ secrets.API_TOKEN }}
+
         GOREST_BASE_URL: ${{ secrets.GOREST_BASE_URL }}
         GOREST_TOKEN: ${{ secrets.GOREST_TOKEN }}
-      run: poetry run task test-all
+      
+      run: |
+        ENV_NAME="${{ inputs.target_env || 'qa' }}"
+        
+        echo "Rodando testes no ambiente: $ENV_NAME"
+        
+        poetry run task test-all --env=$ENV_NAME
 
     - name: Get Allure History
       uses: actions/checkout@v4

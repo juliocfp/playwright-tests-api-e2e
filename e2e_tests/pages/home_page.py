@@ -6,7 +6,7 @@ class HomePage:
         self.product_name_locator = page.locator("data-test=product-name")
 
     def navigate(self):
-        self.page.goto("https://practicesoftwaretesting.com/")
+        self.page.goto("/")
 
     def select_product_by_name(self, product_name):
         product_name_locator = self.product_name_locator.filter(has_text=product_name)

@@ -11,12 +11,12 @@ class TestUsersAPI:
     @allure.story("Listar Usuários")
     @allure.title("Deve listar todos os usuários com sucesso")
     @allure.severity(allure.severity_level.CRITICAL)
-    def test_get_all_users(self, api_gorest: APIRequestContext):
+    def test_get_all_users(self, api_context: APIRequestContext):
         with allure.step("Pré-condição: Criar um usuário para garantir massa de dados"):
-            create_user_helper(api_gorest)
+            create_user_helper(api_context)
         
         with allure.step("Requisição GET para listar usuários"):
-            response = api_gorest.get("/public/v2/users")
+            response = api_context.get("/public/v2/users")
         
         expect(response).to_be_ok()
         assert response.status == 200
@@ -37,13 +37,13 @@ class TestUsersAPI:
     @allure.story("Buscar Usuário")
     @allure.title("Deve buscar um usuário existente com sucesso")
     @allure.severity(allure.severity_level.CRITICAL)
-    def test_get_user(self, api_gorest: APIRequestContext):
+    def test_get_user(self, api_context: APIRequestContext):
         with allure.step("Pré-condição: Criar um usuário para garantir massa de dados"):
-            user_data = create_user_helper(api_gorest).json()
+            user_data = create_user_helper(api_context).json()
             user_id = user_data["id"]
 
         with allure.step("Requisição GET para buscar usuário específico"):
-            response = api_gorest.get(f"/public/v2/users/{user_id}")
+            response = api_context.get(f"/public/v2/users/{user_id}")
         
         expect(response).to_be_ok()
         assert response.status == 200
@@ -62,9 +62,9 @@ class TestUsersAPI:
     @allure.story("Buscar Usuário")
     @allure.title("Não deve retornar usuário inexistente")
     @allure.severity(allure.severity_level.NORMAL)
-    def test_get_user_not_found(self, api_gorest: APIRequestContext):
+    def test_get_user_not_found(self, api_context: APIRequestContext):
         with allure.step("Requisição GET para usuário inexistente"):
-            response = api_gorest.get("/public/v2/users/00000")
+            response = api_context.get("/public/v2/users/00000")
         
         assert response.status == 404
         data = response.json()
@@ -75,11 +75,11 @@ class TestUsersAPI:
     @allure.story("Criar Usuário")
     @allure.title("Deve criar um novo usuário com sucesso")
     @allure.severity(allure.severity_level.BLOCKER)
-    def test_create_user(self, api_gorest: APIRequestContext): 
+    def test_create_user(self, api_context: APIRequestContext): 
         payload = get_user_payload()
 
         with allure.step("Requisição POST para criar usuário"):
-            response = api_gorest.post("/public/v2/users", data=payload)
+            response = api_context.post("/public/v2/users", data=payload)
         
         expect(response).to_be_ok()
         assert response.status == 201
@@ -97,12 +97,12 @@ class TestUsersAPI:
     @allure.story("Criar Usuário")
     @allure.title("Não deve criar usuário com email inválido")
     @allure.severity(allure.severity_level.NORMAL)
-    def test_create_user_invalid_email(self, api_gorest: APIRequestContext):
+    def test_create_user_invalid_email(self, api_context: APIRequestContext):
         payload = get_user_payload()
         payload["email"] = "email_invalido"
 
         with allure.step("Requisição POST com email inválido"):
-            response = api_gorest.post("/public/v2/users", data=payload)
+            response = api_context.post("/public/v2/users", data=payload)
         
         assert response.status == 422
         data = response.json()
@@ -114,9 +114,9 @@ class TestUsersAPI:
     @allure.story("Criar Usuário")
     @allure.title("Não deve criar usuário sem campos obrigatórios")
     @allure.severity(allure.severity_level.NORMAL)
-    def test_create_user_missing_fields(self, api_gorest: APIRequestContext):
+    def test_create_user_missing_fields(self, api_context: APIRequestContext):
         with allure.step("Requisição POST sem campos obrigatórios"):
-            response = api_gorest.post("/public/v2/users", data={})
+            response = api_context.post("/public/v2/users", data={})
         
         assert response.status == 422
         data = response.json()
@@ -130,9 +130,9 @@ class TestUsersAPI:
     @allure.story("Criar Usuário")
     @allure.title("Não deve criar usuário com JSON malformado")
     @allure.severity(allure.severity_level.NORMAL)
-    def test_create_user_malformed_json(self, api_gorest: APIRequestContext):
+    def test_create_user_malformed_json(self, api_context: APIRequestContext):
         with allure.step("Requisição POST com JSON malformado"):
-            response = api_gorest.post("/public/v2/users", data="{invalid_json")
+            response = api_context.post("/public/v2/users", data="{invalid_json")
         
         assert response.status == 401
         data = response.json()
@@ -143,16 +143,16 @@ class TestUsersAPI:
     @allure.story("Criar Usuário")
     @allure.title("Não deve criar usuário duplicado")
     @allure.severity(allure.severity_level.CRITICAL)
-    def test_create_duplicated_user(self, api_gorest: APIRequestContext):
+    def test_create_duplicated_user(self, api_context: APIRequestContext):
         with allure.step("Requisição POST para criar primeiro usuário"):
             payload = get_user_payload()
-            response = api_gorest.post("/public/v2/users", data=payload)
+            response = api_context.post("/public/v2/users", data=payload)
         
         expect(response).to_be_ok()
         assert response.status == 201
         
         with allure.step("Requisição POST para criar usuário duplicado"):
-            response = api_gorest.post("/public/v2/users", data=payload)
+            response = api_context.post("/public/v2/users", data=payload)
         
         assert response.status == 422        
         data = response.json()       
@@ -164,9 +164,9 @@ class TestUsersAPI:
     @allure.story("Criar Usuário")
     @allure.title("Não deve permitir criação sem autenticação")
     @allure.severity(allure.severity_level.CRITICAL)
-    def test_create_user_without_authentication(self, api_gorest: APIRequestContext):
+    def test_create_user_without_authentication(self, api_context: APIRequestContext):
         with allure.step("Requisição sem token válido"):
-            response = api_gorest.post("/public/v2/users", headers={"Authorization": ""})
+            response = api_context.post("/public/v2/users", headers={"Authorization": ""})
         
         assert response.status == 401
         data = response.json()
@@ -177,15 +177,15 @@ class TestUsersAPI:
     @allure.story("Atualizar Usuário")
     @allure.title("Deve atualizar um usuário existente")
     @allure.severity(allure.severity_level.NORMAL)
-    def test_update_user(self, api_gorest: APIRequestContext):
+    def test_update_user(self, api_context: APIRequestContext):
         with allure.step("Pré-condição: Criar um usuário para garantir massa de dados"):
-            user_data = create_user_helper(api_gorest).json()
+            user_data = create_user_helper(api_context).json()
             user_id = user_data["id"]
 
         updated_payload = get_user_payload()
 
         with allure.step("Requisição PUT para atualizar usuário"):
-            response = api_gorest.put(f"/public/v2/users/{user_id}", data=updated_payload)
+            response = api_context.put(f"/public/v2/users/{user_id}", data=updated_payload)
         
         expect(response).to_be_ok()
         assert response.status == 200
@@ -199,11 +199,11 @@ class TestUsersAPI:
     @allure.story("Atualizar Usuário")
     @allure.title("Não deve atualizar usuário inexistente")
     @allure.severity(allure.severity_level.NORMAL)
-    def test_update_user_not_found(self, api_gorest: APIRequestContext):
+    def test_update_user_not_found(self, api_context: APIRequestContext):
         payload = get_user_payload()
         
         with allure.step("Requisição PUT em usuário inexistente"):
-            response = api_gorest.put("/public/v2/users/00000", data=payload)
+            response = api_context.put("/public/v2/users/00000", data=payload)
         
         assert response.status == 404
         data = response.json()
@@ -214,13 +214,13 @@ class TestUsersAPI:
     @allure.story("Atualizar Usuário")
     @allure.title("Não deve permitir atualização sem autenticação")
     @allure.severity(allure.severity_level.CRITICAL)
-    def test_update_user_without_authentication(self, api_gorest: APIRequestContext):
+    def test_update_user_without_authentication(self, api_context: APIRequestContext):
         with allure.step("Pré-condição: Criar um usuário para garantir massa de dados"):
-            user_data = create_user_helper(api_gorest).json()
+            user_data = create_user_helper(api_context).json()
             user_id = user_data["id"]
         
         with allure.step("Requisição sem token válido"):
-            response = api_gorest.put(f"/public/v2/users/{user_id}", headers={"Authorization": "Bearer token_invalido"})
+            response = api_context.put(f"/public/v2/users/{user_id}", headers={"Authorization": "Bearer token_invalido"})
         
         assert response.status == 401
         data = response.json()
@@ -231,13 +231,13 @@ class TestUsersAPI:
     @allure.story("Remover Usuário")
     @allure.title("Deve remover um usuário existente")
     @allure.severity(allure.severity_level.CRITICAL)
-    def test_delete_user(self, api_gorest: APIRequestContext):
+    def test_delete_user(self, api_context: APIRequestContext):
         with allure.step("Pré-condição: Criar um usuário para garantir massa de dados"):
-            user_data = create_user_helper(api_gorest).json()
+            user_data = create_user_helper(api_context).json()
             user_id = user_data["id"]
         
         with allure.step("Requisição DELETE para remover usuário"):
-            response = api_gorest.delete(f"/public/v2/users/{user_id}")
+            response = api_context.delete(f"/public/v2/users/{user_id}")
         
         expect(response).to_be_ok()
         assert response.status == 204
@@ -248,9 +248,9 @@ class TestUsersAPI:
     @allure.story("Remover Usuário")
     @allure.title("Não deve remover usuário inexistente")
     @allure.severity(allure.severity_level.MINOR)
-    def test_delete_user_not_found(self, api_gorest: APIRequestContext):
+    def test_delete_user_not_found(self, api_context: APIRequestContext):
         with allure.step("Requisição DELETE em usuário inexistente"):
-            response = api_gorest.delete("/public/v2/users/00000")
+            response = api_context.delete("/public/v2/users/00000")
         
         assert response.status == 404
         data = response.json()
@@ -261,13 +261,13 @@ class TestUsersAPI:
     @allure.story("Remover Usuário")
     @allure.title("Não deve permitir remoção sem autenticação")
     @allure.severity(allure.severity_level.CRITICAL)
-    def test_delete_user_without_authentication(self, api_gorest: APIRequestContext):
+    def test_delete_user_without_authentication(self, api_context: APIRequestContext):
         with allure.step("Pré-condição: Criar um usuário para garantir massa de dados"):
-            user_data = create_user_helper(api_gorest).json()
+            user_data = create_user_helper(api_context).json()
             user_id = user_data["id"]
         
         with allure.step("Requisição sem token válido"):
-            response = api_gorest.delete(f"/public/v2/users/{user_id}", headers={"Authorization": "Bearer token_invalido"})
+            response = api_context.delete(f"/public/v2/users/{user_id}", headers={"Authorization": "Bearer token_invalido"})
         
         assert response.status == 401
         data = response.json()
