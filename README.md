@@ -34,6 +34,9 @@ O projeto utiliza **Taskipy** para orquestrar os comandos, **Poetry** para geren
 ├── pyproject.toml          # Configuração do projeto, dependências e scripts (Taskipy)
 └── README.md               # Documentação principal (Instalação e Governança)
 ```
+* `/api-tests`: Contém os testes de backend e validações de serviço.
+
+* `/e2e_tests`: Contém os testes de interface, Page Objects e arquivos .feature (BDD).
 
 ## 🚀 Instalação e Configuração
 
@@ -84,9 +87,4 @@ Focados em contratos e regras de negócio no backend.
 * `poetry run task report`
     Gera e abre o relatório HTML unificado (Allure) com os resultados da última execução.
 
-## 📂 Estrutura do Projeto
-
-* `/api-tests`: Contém os testes de backend e validações de serviço.
-
-* `/e2e_tests`: Contém os testes de interface, Page Objects e arquivos .feature (BDD).
 
