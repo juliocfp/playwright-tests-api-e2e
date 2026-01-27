@@ -63,9 +63,6 @@ jobs:
         API_URL_PRD: ${{ secrets.API_URL_PRD }}
         
         API_TOKEN: ${{ secrets.API_TOKEN }}
-
-        GOREST_BASE_URL: ${{ secrets.GOREST_BASE_URL }}
-        GOREST_TOKEN: ${{ secrets.GOREST_TOKEN }}
       
       run: |
         ENV_NAME="${{ inputs.target_env || 'qa' }}"
